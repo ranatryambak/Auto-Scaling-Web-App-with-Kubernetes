@@ -25,3 +25,33 @@ minikube start --driver=docker
 ### 2️⃣ Point Docker to Minikube
 eval $(minikube docker-env)
 
+
+### Build the Docker image:
+docker build -t auto-scaling-app:latest .
+
+### Deploy the application to Kubernetes:
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f hpa.yaml
+
+### Check that pods are running:
+kubectl get pods
+
+### Access the application locally:
+kubectl port-forward service/flask-service 5000:80
+
+### (Optional) Test autoscaling:
+### Install Apache Benchmark:
+sudo apt install apache2-utils
+
+### Send 1000 requests with 50 concurrent connections:
+ab -n 1000 -c 50 http://127.0.0.1:5000/
+
+### Watch autoscaler activity:
+kubectl get hpa -w
+
+### Stop everything when done:
+minikube stop
+
+### Or delete Minikube completely:
+minikube delete --all
