@@ -42,12 +42,27 @@ pipeline {
         }
     }
 
+    stage('Port Forward & Show URL') {
+            steps {
+                script {
+                    // Find a free local port (5000 in our case)
+                    sh """
+                    nohup kubectl port-forward service/flask-service 5000:80 > /dev/null 2>&1 &
+                    sleep 3
+                    echo "✅ Application is live at: http://127.0.0.1:5000"
+                    """
+                }
+            }
+        }
+    
+
     post {
         success {
-            echo "✅ Deployment to Minikube successful!"
+            echo "🚀 Deployment successful! Access your app at: http://127.0.0.1:5000"
         }
         failure {
             echo "❌ Build or deployment failed!"
         }
     }
+
 }
