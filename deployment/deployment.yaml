@@ -17,6 +17,10 @@ spec:
         image: tryambak79/auto-scaling-flask-app:latest
         ports:
         - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: flask-config
+
         resources:
           requests:
             cpu: "100m"
