@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
+                git branch: 'main', url: 'https://github.com/ranatryambak/Auto-Scaling-Web-App-with-Kubernetes'
             }
         }
 
@@ -37,16 +37,6 @@ pipeline {
             }
         }
 
-        stage('Port Forward & Show URL') {
-            steps {
-                sh """
-                pkill -f "kubectl port-forward" || true
-                nohup kubectl port-forward service/flask-service 5000:80 > /dev/null 2>&1 &
-                sleep 3
-                echo "✅ Application is live at: http://127.0.0.1:5000"
-                """
-            }
-        }
     }
 
     post {
